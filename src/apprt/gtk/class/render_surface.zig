@@ -198,8 +198,11 @@ pub const RenderSurface = extern struct {
             snap.scale(1, -1);
         }
 
+        // Negate snapped Y offset when flipped so subpixel snapping stays in widget space.
+        const origin_y: f32 = if (flip) -@as(f32, @floatCast(origin.y)) else @floatCast(origin.y);
+
         snap.appendTexture(texture, &.{
-            .f_origin = .{ .f_x = @floatCast(origin.x), .f_y = @floatCast(origin.y) },
+            .f_origin = .{ .f_x = @floatCast(origin.x), .f_y = origin_y },
             .f_size = .{ .f_width = css_w, .f_height = css_h },
         });
     }
